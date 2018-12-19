@@ -2,32 +2,56 @@
 
 open System
 
-open Android.App
-open Android.Content
-open Android.OS
+open XamarinForms.Reactive.FSharp
+
+open Xamarin.Forms.Platform.Android
+open Xamarin.Forms
+
+open Android.Graphics.Drawables
+open Android.Content.PM
 open Android.Runtime
-open Android.Views
-open Android.Widget
+open Android.Content
+open Android.App
+open Android
+
+open ReactiveUI
+
+open Splat
+
+open System.IO
+open XamarinForms.Reactive.FSharp
 
 type Resources = Repro.Resource
 
-[<Activity (Label = "Repro", MainLauncher = true, Icon = "@mipmap/icon")>]
+type AppLaunchViewModel(?host: IScreen) = 
+    inherit ReactiveObject()
+    let host = LocatorDefaults.LocateIfNone host
+    interface IRoutableViewModel with
+        member __.HostScreen = host
+        member __.UrlPathSegment = "Home"
+
+type ReproPlatform(context: Activity) =
+    interface IPlatform with
+        member __.GetLocalFilePath fileName = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Personal), fileName)
+        member __.HandleAppLinkRequest _ = ()
+        member __.RegisterDependencies _ = ()
+
+module AppBootstrapping =
+    let LandingPage() =
+        let platform = Locator.Current.GetService<IPlatform>()
+        new AppLaunchViewModel() :> IRoutableViewModel
+    let CreateApp(platform, context) = new App<IPlatform>(platform, context, LandingPage) 
+
+[<Activity(Label = "Issue Repro", ScreenOrientation = ScreenOrientation.Portrait, MainLauncher = true)>]
 type MainActivity () =
-    inherit Activity ()
-
-    let mutable count:int = 1
-
+    inherit FormsApplicationActivity ()
+    let mutable reproPlatform = Unchecked.defaultof<ReproPlatform>
     override this.OnCreate (bundle) =
-
         base.OnCreate (bundle)
-
-        // Set our view from the "main" layout resource
-        this.SetContentView (Resources.Layout.Main)
-
-        // Get our button from the layout resource, and attach an event to it
-        let button = this.FindViewById<Button>(Resources.Id.myButton)
-        button.Click.Add (fun args -> 
-            button.Text <- sprintf "%d clicks!" count
-            count <- count + 1
-        )
-
+        AppDomain.CurrentDomain.UnhandledException.Subscribe(fun ex ->
+            ()
+        ) |> ignore
+        Forms.Init(this, bundle)
+        reproPlatform <- new ReproPlatform(this)
+        let application = AppBootstrapping.CreateApp(reproPlatform, new UiContext(this))
+        this.LoadApplication(application)
