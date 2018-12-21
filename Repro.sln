@@ -5,6 +5,8 @@ VisualStudioVersion = 15.0.28307.168
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "Repro", "Repro\Repro.fsproj", "{B85FB05B-B3EF-4B6D-AE29-EF38ADC58F42}"
 EndProject
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "SharedAndroidLibrary", "SharedAndroidLibrary\SharedAndroidLibrary.fsproj", "{C1D159B0-F794-4C0B-98BD-79795627678B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -17,6 +19,10 @@ Global
 		{B85FB05B-B3EF-4B6D-AE29-EF38ADC58F42}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B85FB05B-B3EF-4B6D-AE29-EF38ADC58F42}.Release|Any CPU.Build.0 = Release|Any CPU
 		{B85FB05B-B3EF-4B6D-AE29-EF38ADC58F42}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{C1D159B0-F794-4C0B-98BD-79795627678B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C1D159B0-F794-4C0B-98BD-79795627678B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C1D159B0-F794-4C0B-98BD-79795627678B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C1D159B0-F794-4C0B-98BD-79795627678B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
